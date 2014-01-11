@@ -1,0 +1,11 @@
+Stuff that would be nice to have:
+
+- symlinks to folders should be treated like folders, not files
+
+- filter out empty folders?
+
+  But what about nested empty folders?
+
+- redirect commands?
+
+  So you can run "git-annex add" in it, and not have it break stuff. Might be easier to do this via a git-annex wrapper, though.
