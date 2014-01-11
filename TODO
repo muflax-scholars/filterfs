@@ -1,7 +1,5 @@
 Stuff that would be nice to have:
 
-- symlinks to folders should be treated like folders, not files
-
 - filter out empty folders?
 
   But what about nested empty folders?
