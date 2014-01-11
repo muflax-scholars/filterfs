@@ -124,7 +124,7 @@ static int append_rules(char *patterns, int exclude)
     while (1) {
         if (append_rule(str, exclude) == -1)
             return -1;
-        
+
         if (!(str = strchr(str, ':')))
             break;
 
@@ -187,7 +187,7 @@ static int ffs_getattr(const char *path, struct stat *stbuf)
     char xpath[PATH_MAX];
     strncpy(xpath, srcdir, sizeof(xpath));
     strncat(xpath, path, sizeof(xpath) - strlen(xpath));
-    
+
     int exclude = exclude_path(xpath);
 
     ffs_debug("getattr: path %s (expanded %s), exclude %s\n", path, xpath,
@@ -211,7 +211,7 @@ static int ffs_access(const char *path, int mask)
     strncat(xpath, path, sizeof(xpath) - strlen(xpath));
 
     int exclude = exclude_path(xpath);
-    
+
     ffs_debug("access: path %s (expanded %s), exclude %s\n", path, xpath,
 exclude ? "y" : "n");
 
@@ -338,7 +338,7 @@ static int ffs_mkdir(const char *path, mode_t mode)
 
     ffs_debug("mkdir: path %s (expanded %s), exclude %s\n", path, xpath,
 exclude ? "y" : "n");
-    
+
     if (exclude)
         return -ENOENT;
 
@@ -360,7 +360,7 @@ static int ffs_unlink(const char *path)
 
     ffs_debug("unlink: path %s (expanded %s), exclude %s\n", path, xpath,
 exclude ? "y" : "n");
-    
+
     if (exclude)
         return -ENOENT;
 
@@ -402,7 +402,7 @@ static int ffs_symlink(const char *from, const char *to)
     if (from[0] != '/')
         strncat(xfrom, "/", sizeof(xfrom) - 1);
     strncat(xfrom, from, sizeof(xfrom) - strlen(xfrom));
-    
+
     char xto[PATH_MAX];
     strncpy(xto, srcdir, sizeof(xto));
     strncat(xto, to, sizeof(xto) - strlen(xto));
@@ -413,7 +413,7 @@ static int ffs_symlink(const char *from, const char *to)
     ffs_debug("symlink: from %s (expanded %s), exclude %s; to %s (expanded %s),"
 " exclude %s\n", from, xfrom, exclude_from ? "y" : "n", to, xto, exclude_to ?
 "y": "n");
-    
+
     if (exclude_from || exclude_to)
         return -ENOENT;
 
@@ -443,8 +443,8 @@ static int ffs_rename(const char *from, const char *to)
     ffs_debug("rename: from %s (expanded %s), exclude %s; to %s (expanded %s),"
 " exclude %s\n", from, xfrom, exclude_from ? "y" : "n", to, xto, exclude_to ?
 "y": "n");
-    
-    if (exclude_from || exclude_to)
+
+    if (exclude_from) // || exclude_to)
         return -ENOENT;
 
     int res;
@@ -473,7 +473,7 @@ static int ffs_link(const char *from, const char *to)
     ffs_debug("link: from %s (expanded %s), exclude %s; to %s (expanded %s),"
 " exclude %s\n", from, xfrom, exclude_from ? "y" : "n", to, xto, exclude_to ?
 "y": "n");
-    
+
     if (exclude_from || exclude_to)
         return -ENOENT;
 
@@ -495,7 +495,7 @@ static int ffs_chmod(const char *path, mode_t mode)
 
     ffs_debug("chmod: path %s (expanded %s), exclude %s\n", path, xpath,
 exclude ? "y" : "n");
-    
+
     if (exclude)
         return -ENOENT;
 
@@ -517,7 +517,7 @@ static int ffs_chown(const char *path, uid_t uid, gid_t gid)
 
     ffs_debug("chown: path %s (expanded %s), exclude %s\n", path, xpath,
 exclude ? "y" : "n");
-    
+
     if (exclude)
         return -ENOENT;
 
@@ -539,7 +539,7 @@ static int ffs_truncate(const char *path, off_t size)
 
     ffs_debug("truncate: path %s (expanded %s), exclude %s\n", path, xpath,
 exclude ? "y" : "n");
-    
+
     if (exclude)
         return -ENOENT;
 
@@ -561,7 +561,7 @@ static int ffs_utimens(const char *path, const struct timespec ts[2])
 
     ffs_debug("utimens: path %s (expanded %s), exclude %s\n", path, xpath,
 exclude ? "y" : "n");
-    
+
     if (exclude)
         return -ENOENT;
 
@@ -614,7 +614,7 @@ static int ffs_read(const char *path, char *buf, size_t size, off_t offset,
 
     ffs_debug("read: path %s (expanded %s), exclude %s\n", path, xpath,
 exclude ? "y" : "n");
-    
+
     if (exclude)
         return -ENOENT;
 
@@ -644,9 +644,9 @@ static int ffs_write(const char *path, const char *buf, size_t size,
 
     ffs_debug("write: path %s (expanded %s), exclude %s\n", path, xpath,
 exclude ? "y" : "n");
-    
+
     ffs_debug("write: path %s (expanded %s)\n", path, xpath);
-    
+
     if (exclude)
         return -ENOENT;
 
@@ -675,7 +675,7 @@ static int ffs_statfs(const char *path, struct statvfs *stbuf)
 
     ffs_debug("statfs: path %s (expanded %s), exclude %s\n", path, xpath,
 exclude ? "y" : "n");
-    
+
     if (exclude)
         return -ENOENT;
 
@@ -738,7 +738,7 @@ static int ffs_getxattr(const char *path, const char *name, char *value,
 
     ffs_debug("getxattr: path %s (expanded %s), exclude %s\n", path, xpath,
 exclude ? "y" : "n");
-    
+
     if (exclude)
         return -ENOENT;
 
@@ -758,7 +758,7 @@ static int ffs_listxattr(const char *path, char *list, size_t size)
 
     ffs_debug("listxattr: path %s (expanded %s), exclude %s\n", path, xpath,
 exclude ? "y" : "n");
-    
+
     if (exclude)
         return -ENOENT;
 
@@ -778,7 +778,7 @@ static int ffs_removexattr(const char *path, const char *name)
 
     ffs_debug("removexattr: path %s (expanded %s), exclude %s\n", path, xpath,
 exclude ? "y" : "n");
-    
+
     if (exclude)
         return -ENOENT;
 
@@ -871,7 +871,7 @@ static int ffs_opt_proc(void *data, const char *arg, int key,
              */
             if (strlen(str) > 0)
                 append_rules(strdup(str), 1);
-            
+
             return 0;
 
         case KEY_INCLUDE:
@@ -964,7 +964,7 @@ int main(int argc, char *argv[])
 "include", curr_rule->pattern);
         curr_rule = curr_rule->next;
     }
-    
+
     umask(0);
     int ret = fuse_main(args.argc, args.argv, &ffs_oper, NULL);
 
