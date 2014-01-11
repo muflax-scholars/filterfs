@@ -4,6 +4,7 @@
 AC_INIT([FilterFS], [0.1])
 AC_CONFIG_SRCDIR([src/filterfs.c])
 AC_CONFIG_AUX_DIR([config])
+AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign -Wall -Werror])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
